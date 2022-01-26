@@ -12,7 +12,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MoreIcon from "@mui/icons-material/More";
 import {useContext, useState} from "react";
 import {CoinsContext} from "../App";
-import {getNumber} from "./utils";
+import {getNumber} from "../utils";
 import LineChart from "./LineChart";
 import {TablePagination} from "@mui/material";
 import {Popover} from "@mui/material";
@@ -89,7 +89,7 @@ const TableComponent = () => {
           <TableBody>
             {coinsData?.coins
               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
+              .map((row,i) => (
                 <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
                     {row.rank}
@@ -104,14 +104,15 @@ const TableComponent = () => {
                     <span>{row.symbol} </span>
                   </TableCell>
                   <TableCell align="right">{row.priceChange1d + "%"}</TableCell>
-                  <TableCell align="right">{row.price.toFixed(6)}</TableCell>
+                  <TableCell align="right">{row.price>=1? row.price.toFixed(2):row.price.toFixed(6)}$</TableCell>
                   <TableCell align="right">{row.priceBtc.toFixed(8)}</TableCell>
                   <TableCell align="right">
                     {getNumber(row.marketCap)}
                   </TableCell>
                   <TableCell align="right">{getNumber(row.volume)}</TableCell>
                   <TableCell align="right">
-                    {<LineChart id={row.id} coinsHistory={coinsHistory} />}
+                    {/*           //////////////////////////////////////////////////////////////////////////////////////   */}
+                    {<LineChart id={row.id}  coinHistory={coinsHistory[i]?coinsHistory[i].chart:[]} />}
                   </TableCell>
                   <TableCell align="right">
                     <button onClick={handlePopover}>
@@ -149,3 +150,12 @@ const TableComponent = () => {
 };
 
 export default TableComponent;
+
+/*
+
+option to remove line 
+
+You could also do this using the prototype methods .update() and .removeData() (http://www.chartjs.org/docs/#line-chart-prototype-methods for Line chart methods - each type has the similar methods)
+ but since your changes require you to remove data from both ends of the graph, .destroy() would be an easier option.
+
+*/ 

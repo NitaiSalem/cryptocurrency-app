@@ -22,7 +22,7 @@ ChartJS.register(
 
 const Chart = () => {
   const data = {
-    labels: "label",
+    labels: "",
     datasets: [
       {
         label: `Coins Available`,

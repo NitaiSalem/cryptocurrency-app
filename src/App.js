@@ -5,7 +5,7 @@ import {createContext} from "react";
 import NavigationBar from "./components/NavigationBar";
 import Chart from "./components/Chart";
 import TableComponent from "./components/Table";
-import { fetchCoins, fetchPriceHistory } from "./components/utils";
+import { fetchCoins, fetchPriceHistory } from "./utils";
 
 
 export const CoinsContext = createContext();
@@ -19,7 +19,6 @@ const getDatafromApi = async()=>{
 
      getCoinsHistory(coinsData.coins); 
 setCoins(coinsData.coins); 
-
 }
 
   useEffect(() => {
@@ -35,8 +34,6 @@ setCoins(coinsData.coins);
     setCoinsHistory(priceHistories)
   };
 
-
-  // const value = 'My Context Value';
   return (
     <div className="App">
       <CoinsContext.Provider value={{coins,coinsHistory }}>

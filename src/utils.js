@@ -17,7 +17,12 @@ export const fetchPriceHistory = async (coinId) => {
       `https://api.coinstats.app/public/v1/charts?period=1w&coinId=${coinId}`
     );
     //return key value pairs
-    return {priceHistory:res.data, id: coinId};
+    //make the key id variable fit to name of coin 
+    // let obj= {}; 
+    // obj[coinId] =res.data
+
+    return res.data;
+
   } catch (err) {
     console.log(err);
   }

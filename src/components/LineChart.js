@@ -20,16 +20,45 @@ ChartJS.register(
   Legend
 );
 
-const LineChart = ({id, coinsHistory}) => {
-const chartDataObj = coinsHistory?.find((coinHistory)=> coinHistory.id === id); 
-const chartValues = chartDataObj?.priceHistory.chart; 
-const latValues = chartValues?.map((arr)=> arr[3])
+/*
+so each label is for one dot.. you need it for each one? 
+
+so data sets for chart needs to be an array of objects, each one with props: id, label, and each array from api. 
+pass to each linechart the obj.id where id is the name of the coins, same as our coins data, thats how you know you pass the right history for right coin..
+
+ dataSet={{
+    labels: ['Jun', 'Jul', 'Aug'],
+    datasets: [
+      {
+        id: 1,
+        label: '',
+        data: [5, 6, 7],
+      },
+      {
+        id: 2,
+        label: '',
+        data: [3, 2, 1],
+      },
+    ],
+  }}
+*/ 
+
+
+const LineChart = ({id, coinHistory}) => {
+const pricevalue = coinHistory.map(arr=> arr[1]); 
+let labelsArr = [];
+for (var i = 1; i <= coinHistory.length; i++) {
+  labelsArr.push("");
+}
+
+console.log( "coins history inline chart " , coinHistory)
 
     const data = {
-      labels: "label",
+      labels:labelsArr,
       datasets: [{
-        label: `Coins Available`,
-        data: latValues,
+        label: ``,
+        data: pricevalue,
+        //set to red or green...
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -46,18 +75,35 @@ const latValues = chartValues?.map((arr)=> arr[3])
           'rgba(153, 102, 255, 1)',
           'rgba(255, 159, 64, 1)'
         ],
-        borderWidth: 1
+       
       }]
     };
   
     const options = {
       maintainAspectRatio: false,
+      responsive:true,
+      drawBorder: false,
       scales: {
-      },
-      legend: {
-        labels: {
-          fontSize: 25,
+        x: {
+          ticks: {display:false},
+          grid:{
+            display:false,
+            drawBorder: false,
+          }
+          
         },
+        y: {
+          ticks: {display:false},
+          grid:{
+            display:false,
+            drawBorder: false,
+          }
+     }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
       },
     }
   
