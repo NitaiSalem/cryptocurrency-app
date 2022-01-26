@@ -16,11 +16,6 @@ export const fetchPriceHistory = async (coinId) => {
     const res = await axios.get(
       `https://api.coinstats.app/public/v1/charts?period=1w&coinId=${coinId}`
     );
-    //return key value pairs
-    //make the key id variable fit to name of coin 
-    // let obj= {}; 
-    // obj[coinId] =res.data
-
     return res.data;
 
   } catch (err) {

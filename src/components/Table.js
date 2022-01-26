@@ -7,9 +7,6 @@ import {
   TableRow,
   Paper,
   TableSortLabel,
-  Menu,
-  MenuItem,
-  Button,
 } from "@mui/material";
 import MoreIcon from "@mui/icons-material/More";
 import {useContext, useState} from "react";
@@ -17,30 +14,21 @@ import {CoinsContext} from "../App";
 import {getNumber} from "../utils";
 import LineChart from "./LineChart";
 import {TablePagination} from "@mui/material";
-import {Popover} from "@mui/material";
 import "./table.scss";
 import IsolatedMenu from "./IsolatedMenu";
 
 const TableComponent = () => {
   let coinsData = useContext(CoinsContext);
-
-  const {coinsHistory, coins, setToCompare, toCompare} =
-    useContext(CoinsContext);
-
-  console.log("to compare value here", toCompare);
-
+  const {coinsHistory, coins} = useContext(CoinsContext);
   const [orderDirection, setOrderDirection] = useState("desc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  const open = Boolean(anchorEl);
 
   const handleChangeRowsPerPage = (event) => {
-    console.log(" the event here ", event);
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -134,7 +122,6 @@ const TableComponent = () => {
                   </TableCell>
                   <TableCell align="right">{getNumber(coin.volume)}</TableCell>
                   <TableCell align="right" style={{width: "200px"}}>
-                    {/*           //////////////////////////////////////////////////////////////////////////////////////   */}
                     {
                       <LineChart
                         id={coin.id}
@@ -145,25 +132,7 @@ const TableComponent = () => {
                     }
                   </TableCell>
                   <TableCell align="right">
-                    {/* <button onClick={handlePopover}>
-                      <MoreVertIcon />
-                    </button> */}
-                 
-                    {/* <button onClick={()=> handleAddToCompare(coin,coinsHistory[i].chart)}>Add to compare</button> */}
                     <IsolatedMenu coin={coin} coinsHistory={coinsHistory} index={i} />
-                    {/* <Popover
-                      id={popoverId}
-                      open={open}
-                      anchorEl={anchorEl}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                      }}
-                    >
-                      <button>delete</button>
-                      <button onClick={()=> handleAddToCompare(coin,coinsHistory[i].chart)}>Add to compare</button>
-                    </Popover> */}
                   </TableCell>
                 </TableRow>
               ))}
