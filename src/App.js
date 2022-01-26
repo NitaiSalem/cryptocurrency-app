@@ -13,6 +13,8 @@ export const CoinsContext = createContext();
 function App() {
   const [coins, setCoins] = useState([]);
   const [coinsHistory, setCoinsHistory]= useState([]); 
+  const [toCompare, setToCompare] = useState({});
+
 
 const getDatafromApi = async()=>{
   const coinsData = await fetchCoins(); 
@@ -26,7 +28,7 @@ setCoins(coinsData.coins);
   }, []);
 
   const getCoinsHistory = async (coins) => {
-    
+
     const priceHistories = await Promise.all(
       coins.map((coin) => {
         return fetchPriceHistory(coin.id);
@@ -37,7 +39,7 @@ setCoins(coinsData.coins);
 
   return (
     <div className="App">
-      <CoinsContext.Provider value={{coins,coinsHistory }}>
+      <CoinsContext.Provider value={{coins,coinsHistory,setToCompare, toCompare}}>
         <HashRouter basename="/">
           <NavigationBar />
           <Routes>

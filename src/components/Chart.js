@@ -8,7 +8,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useContext } from "react";
 import {Line} from "react-chartjs-2";
+import {CoinsContext} from "../App";
 
 ChartJS.register(
   CategoryScale,
@@ -20,7 +22,13 @@ ChartJS.register(
   Legend
 );
 
+
 const Chart = () => {
+
+  const { toCompare } = useContext(CoinsContext);
+
+console.log(" to compare inside chart ",toCompare)
+
   const data = {
     labels: "",
     datasets: [

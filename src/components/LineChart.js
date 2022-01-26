@@ -44,11 +44,9 @@ ChartJS.register(
 const LineChart = ({id, coinHistory}) => {
 const priceValue = coinHistory.map(arr=> arr[1]); 
 let labelsArr = [];
-for (var i = 1; i <= coinHistory.length; i++) {
+for (let i = 1; i <= coinHistory.length; i++) {
   labelsArr.push("");
 }
-
-console.log( "coins history in line chart " , coinHistory)
 
     const data = {
       labels:labelsArr,

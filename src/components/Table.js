@@ -7,8 +7,10 @@ import {
   TableRow,
   Paper,
   TableSortLabel,
+  Menu,
+  MenuItem,
+  Button,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MoreIcon from "@mui/icons-material/More";
 import {useContext, useState} from "react";
 import {CoinsContext} from "../App";
@@ -16,28 +18,26 @@ import {getNumber} from "../utils";
 import LineChart from "./LineChart";
 import {TablePagination} from "@mui/material";
 import {Popover} from "@mui/material";
-import "./table.scss"; 
+import "./table.scss";
+import IsolatedMenu from "./IsolatedMenu";
 
 const TableComponent = () => {
   let coinsData = useContext(CoinsContext);
-  const coinsHistory = coinsData.coinsHistory;
+
+  const {coinsHistory, coins, setToCompare, toCompare} =
+    useContext(CoinsContext);
+
+  console.log("to compare value here", toCompare);
+
   const [orderDirection, setOrderDirection] = useState("desc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handlePopover = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
   const open = Boolean(anchorEl);
-  const popoverId = open ? "simple-popover" : undefined;
 
   const handleChangeRowsPerPage = (event) => {
     console.log(" the event here ", event);
@@ -60,13 +60,18 @@ const TableComponent = () => {
   };
 
   const handleSortRequest = () => {
-    coinsData = sortArray(coinsData.coins, orderDirection);
+    coinsData = sortArray(coins, orderDirection);
     setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
   };
+  
 
   return (
-    <div  className="container">
-      <TableContainer style={{  marginLeft: 100 }} className= "table-container" component={Paper} >
+    <div className="container">
+      <TableContainer
+        style={{marginLeft: 100}}
+        className="table-container"
+        component={Paper}
+      >
         <Table aria-label="simple table" stickyHeader>
           <TableHead>
             <TableRow>
@@ -88,38 +93,65 @@ const TableComponent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {coinsData?.coins
+            {coins
               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row,i) => (
-                <TableRow key={row.id}>
+              .map((coin, i) => (
+                <TableRow key={coin.id}>
                   <TableCell component="th" scope="row">
-                    {row.rank}
+                    {coin.rank}
                   </TableCell>
                   <TableCell align="right">
                     <img
                       style={{height: "25px"}}
-                      src={row.icon}
+                      src={coin.icon}
                       alt="icon"
                     ></img>
-                    {row.name + " "}
-                    <span>{row.symbol} </span>
+                    {coin.name + " "}
+                    <span>{coin.symbol} </span>
                   </TableCell>
-                  <TableCell align="right" style={{color:row.priceChange1d>0? 'rgb(1, 110, 74)': 'rgb(161, 0, 0)' }}>{row.priceChange1d + "%"}</TableCell>
-                  <TableCell align="right">{row.price>=1? row.price.toFixed(2):row.price.toFixed(6)}$</TableCell>
-                  <TableCell align="right">{row.priceBtc.toFixed(8)}</TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      color:
+                        coin.priceChange1d > 0
+                          ? "rgb(1, 110, 74)"
+                          : "rgb(161, 0, 0)",
+                    }}
+                  >
+                    {coin.priceChange1d + "%"}
+                  </TableCell>
                   <TableCell align="right">
-                    {getNumber(row.marketCap)}
+                    {coin.price >= 1
+                      ? coin.price.toFixed(2)
+                      : coin.price.toFixed(6)}
+                    $
                   </TableCell>
-                  <TableCell align="right">{getNumber(row.volume)}</TableCell>
-                  <TableCell align="right" style={{width:"200px"}}>
+                  <TableCell align="right">
+                    {coin.priceBtc.toFixed(8)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {getNumber(coin.marketCap)}
+                  </TableCell>
+                  <TableCell align="right">{getNumber(coin.volume)}</TableCell>
+                  <TableCell align="right" style={{width: "200px"}}>
                     {/*           //////////////////////////////////////////////////////////////////////////////////////   */}
-                    {<LineChart id={row.id}  coinHistory={coinsHistory[i]?coinsHistory[i].chart:[]} />}
+                    {
+                      <LineChart
+                        id={coin.id}
+                        coinHistory={
+                          coinsHistory[i] ? coinsHistory[i].chart : []
+                        }
+                      />
+                    }
                   </TableCell>
                   <TableCell align="right">
-                    <button onClick={handlePopover}>
+                    {/* <button onClick={handlePopover}>
                       <MoreVertIcon />
-                    </button>
-                    <Popover
+                    </button> */}
+                 
+                    {/* <button onClick={()=> handleAddToCompare(coin,coinsHistory[i].chart)}>Add to compare</button> */}
+                    <IsolatedMenu coin={coin} coinsHistory={coinsHistory} index={i} />
+                    {/* <Popover
                       id={popoverId}
                       open={open}
                       anchorEl={anchorEl}
@@ -130,8 +162,8 @@ const TableComponent = () => {
                       }}
                     >
                       <button>delete</button>
-                      <button>Add to compare</button>
-                    </Popover>
+                      <button onClick={()=> handleAddToCompare(coin,coinsHistory[i].chart)}>Add to compare</button>
+                    </Popover> */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -160,4 +192,4 @@ option to remove line
 You could also do this using the prototype methods .update() and .removeData() (http://www.chartjs.org/docs/#line-chart-prototype-methods for Line chart methods - each type has the similar methods)
  but since your changes require you to remove data from both ends of the graph, .destroy() would be an easier option.
 
-*/ 
+*/
