@@ -16,6 +16,7 @@ import {getNumber} from "../utils";
 import LineChart from "./LineChart";
 import {TablePagination} from "@mui/material";
 import {Popover} from "@mui/material";
+import "./table.scss"; 
 
 const TableComponent = () => {
   let coinsData = useContext(CoinsContext);
@@ -103,14 +104,14 @@ const TableComponent = () => {
                     {row.name + " "}
                     <span>{row.symbol} </span>
                   </TableCell>
-                  <TableCell align="right">{row.priceChange1d + "%"}</TableCell>
+                  <TableCell align="right" style={{color:row.priceChange1d>0? 'rgb(1, 110, 74)': 'rgb(161, 0, 0)' }}>{row.priceChange1d + "%"}</TableCell>
                   <TableCell align="right">{row.price>=1? row.price.toFixed(2):row.price.toFixed(6)}$</TableCell>
                   <TableCell align="right">{row.priceBtc.toFixed(8)}</TableCell>
                   <TableCell align="right">
                     {getNumber(row.marketCap)}
                   </TableCell>
                   <TableCell align="right">{getNumber(row.volume)}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" style={{width:"200px"}}>
                     {/*           //////////////////////////////////////////////////////////////////////////////////////   */}
                     {<LineChart id={row.id}  coinHistory={coinsHistory[i]?coinsHistory[i].chart:[]} />}
                   </TableCell>
@@ -129,6 +130,7 @@ const TableComponent = () => {
                       }}
                     >
                       <button>delete</button>
+                      <button>Add to compare</button>
                     </Popover>
                   </TableCell>
                 </TableRow>

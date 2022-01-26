@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import "./table.scss"; 
 
 ChartJS.register(
   CategoryScale,
@@ -21,10 +22,6 @@ ChartJS.register(
 );
 
 /*
-so each label is for one dot.. you need it for each one? 
-
-so data sets for chart needs to be an array of objects, each one with props: id, label, and each array from api. 
-pass to each linechart the obj.id where id is the name of the coins, same as our coins data, thats how you know you pass the right history for right coin..
 
  dataSet={{
     labels: ['Jun', 'Jul', 'Aug'],
@@ -45,37 +42,21 @@ pass to each linechart the obj.id where id is the name of the coins, same as our
 
 
 const LineChart = ({id, coinHistory}) => {
-const pricevalue = coinHistory.map(arr=> arr[1]); 
+const priceValue = coinHistory.map(arr=> arr[1]); 
 let labelsArr = [];
 for (var i = 1; i <= coinHistory.length; i++) {
   labelsArr.push("");
 }
 
-console.log( "coins history inline chart " , coinHistory)
+console.log( "coins history in line chart " , coinHistory)
 
     const data = {
       labels:labelsArr,
       datasets: [{
         label: ``,
-        data: pricevalue,
-        //set to red or green...
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-       
+        data: priceValue,
+        pointRadius: 0.1,
+        borderColor: priceValue[0]> priceValue[priceValue.length-1] ?'rgb(1, 110, 74)': 'rgb(161, 0, 0)',
       }]
     };
   
@@ -108,7 +89,7 @@ console.log( "coins history inline chart " , coinHistory)
     }
   
     return (
-      <div>
+      <div className= "chart-wrapper">
         <Line
           data={data}
           height={100}
