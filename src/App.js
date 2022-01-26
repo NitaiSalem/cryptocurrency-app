@@ -26,6 +26,7 @@ setCoins(coinsData.coins);
   }, []);
 
   const getCoinsHistory = async (coins) => {
+    
     const priceHistories = await Promise.all(
       coins.map((coin) => {
         return fetchPriceHistory(coin.id);
