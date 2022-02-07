@@ -1,0 +1,11 @@
+.coins-to-compare-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.single-coin-cointainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

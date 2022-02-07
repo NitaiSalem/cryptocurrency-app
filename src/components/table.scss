@@ -1,7 +1,64 @@
+.container {
+  overflow-x: auto;
+}
 
+@media (max-width: 600px) {
+  .container {
+    margin-top: 50px;
+  }
 
+  .css-11bfvty-MuiToolbar-root-MuiTablePagination-toolbar
+    .MuiTablePagination-actions {
+    margin-left: 0 !important;
+  }
+  .css-pdct74-MuiTablePagination-selectLabel {
+  }
+  .css-pdct74-MuiTablePagination-selectLabel {
+    font-size: 13px !important;
+  }
+  .css-levciy-MuiTablePagination-displayedRows {
+    font-size: 13px !important;
+  }
+  .css-16c50h-MuiInputBase-root-MuiTablePagination-select
+    .MuiTablePagination-select {
+    padding-left: 3px !important;
+  }
+}
+.css-11bfvty-MuiToolbar-root-MuiTablePagination-toolbar {
+  overflow-x: hidden;
+}
 
-.cofdgdfbflor{
+th {
+  white-space: nowrap;
+}
 
-    color:rgb(161, 0, 0)
+// td {
+//   padding: 5px !important;
+// }
+
+.table-container {
+  //   width: 400px;
+}
+
+#coinName {
+  //   display: flex;
+  //   flex-direction: row;
+  //   height: 100%;
+  //   //   margin-top: 25px;
+  //   //   padding-bottom: 22px;
+  //   align-items: center;
+  //   align-self: center;
+  //   height: 100%;
+  //   background-color: salmon;
+}
+
+td img {
+  //   display: inline-block;
+  //   margin-top: auto;
+  //   margin-bottom: auto;
+  //   display: flex;
+  //   flex-direction: row;
+  //   justify-self: center;
+  //   justify-content: center;
+  //   align-self: center;
 }

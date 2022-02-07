@@ -1,0 +1,32 @@
+@media (max-width: 600px) {
+  .navList-container {
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+  }
+  .css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+    height: 50px !important;
+    width: 100%;
+    overflow-y: hidden !important;
+  }
+  .MuiDrawer-paper {
+    width: 100% !important;
+  }
+
+  .nav-link {
+    display: flex;
+  }
+  .css-1p823my-MuiListItem-root {
+    display: flex;
+    justify-content: center !important;
+  }
+}
+
+.MuiDrawer-paper {
+  width: 100px;
+  height: 100px;
+}
+
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+  height: 100px;
+}

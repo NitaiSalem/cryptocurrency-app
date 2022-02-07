@@ -1,13 +1,8 @@
 import {Link} from "react-router-dom";
-import Drawer from "@mui/material/Drawer";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
+import {Drawer, Box, List, Divider, ListItem, CssBaseline} from "@mui/material";
 
-const drawerWidth = 100;
+import * as React from "react";
+import "./navBar.scss";
 
 export default function NavigationBar() {
   return (
@@ -16,23 +11,30 @@ export default function NavigationBar() {
 
       <Drawer
         sx={{
-          width: drawerWidth,
+          width: 100,
           flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
         }}
         variant="permanent"
-        anchor="left"
       >
         <Divider />
-        <List>
+        <List className="navList-container">
           <ListItem>
-            <Link style={{textDecoration: "none", color:"#001145"}} to="/">Table</Link>
+            <Link
+              className="nav-link"
+              style={{textDecoration: "none", color: "#001145"}}
+              to="/"
+            >
+              Table
+            </Link>
           </ListItem>
           <ListItem>
-            <Link style={{textDecoration: "none", color:"#001145"}} to="/Chart">Chart</Link>
+            <Link
+              className="nav-link"
+              style={{textDecoration: "none", color: "#001145"}}
+              to="/Chart"
+            >
+              Chart
+            </Link>
           </ListItem>
         </List>
         <Divider />
@@ -40,5 +42,3 @@ export default function NavigationBar() {
     </Box>
   );
 }
-
-

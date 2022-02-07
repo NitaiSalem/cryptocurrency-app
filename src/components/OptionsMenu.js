@@ -2,19 +2,25 @@ import {Button, Menu, MenuItem} from "@mui/material";
 import {useContext, useState} from "react";
 import {CoinsContext} from "../App";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {fetchPriceHistory} from "../utils";
 
-const IsolatedMenu = ({coin, coinsHistory, index}) => {
+const OptionsMenu = ({coin, coinsHistory, index, handleDelete}) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const {setToCompare} = useContext(CoinsContext);
+  const isOpen = Boolean(anchorEl);
+  const {setToCompare, toCompare} = useContext(CoinsContext);
 
-  const handleAddToCompare = (coin, coinHistory) => {
+  const handleAddToCompare = async (coin) => {
     console.log(" the coin value on click ", coin);
-    setToCompare({coin: coin, coinHistory: coinHistory});
-  };
-  const handleClose = () => {
     setAnchorEl(null);
+
+    if (!toCompare.find(({coinId}) => coinId === coin.id)) {
+      const coinId = coin.id;
+      const coinHistory = await fetchPriceHistory(coinId, "24h");
+      console.log({coinHistory});
+      setToCompare([...toCompare, {coinId, coin, coinHistory}]);
+    }
   };
+
   const openMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -23,9 +29,9 @@ const IsolatedMenu = ({coin, coinsHistory, index}) => {
     <div>
       <Button
         id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
+        aria-controls={isOpen ? "basic-menu" : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
+        aria-expanded={isOpen ? "true" : undefined}
         onClick={openMenu}
       >
         <MoreVertIcon />
@@ -33,21 +39,19 @@ const IsolatedMenu = ({coin, coinsHistory, index}) => {
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
-        open={open}
+        open={isOpen}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem
-          onClick={() => handleAddToCompare(coin, coinsHistory[index].chart)}
-        >
+        <MenuItem onClick={() => handleAddToCompare(coin)}>
           Add to compare
         </MenuItem>
-        <MenuItem onClick={handleClose}>Delete row</MenuItem>
+        <MenuItem onClick={() => handleDelete(coin)}>Delete row</MenuItem>
       </Menu>
     </div>
   );
 };
 
-export default IsolatedMenu;
+export default OptionsMenu;
