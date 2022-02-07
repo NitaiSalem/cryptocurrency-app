@@ -84,7 +84,7 @@ const TableComponent = () => {
 
   return (
     <div className="container">
-      <Grid xs={12}>
+      <Grid item xs={12}>
         <TableContainer className={classes.root}>
           <Table
             className={classes.table}
