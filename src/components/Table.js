@@ -23,7 +23,9 @@ import OptionsMenu from "./OptionsMenu";
 const useStyles = makeStyles({
   root: {},
   table: {},
-  tableRow: {},
+  nameCell: {
+    whiteSpace: "nowrap",
+  },
   tableCell: {
     paddingRight: 4,
     paddingLeft: 10,
@@ -39,16 +41,9 @@ const TableComponent = () => {
   const [orderDirection, setOrderDirection] = useState("desc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [isSorted, setIsSorted] = useState(false);
 
-  useEffect(() => {
-    if (isSorted) {
-      setCoinsHistory(coinsHistory.reverse());
-    }
-  }, [isSorted]);
-
-  // console.log(" coins in table ", coins);
-  // console.log("coinshistory intable", coinsHistory);
+  console.log(" coins in table ", coins);
+  console.log("coinshistory intable", coinsHistory);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -75,11 +70,12 @@ const TableComponent = () => {
   const handleSortRequest = () => {
     setCoins(sortArray(coins, orderDirection));
     setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
-    setIsSorted((isSorted) => !isSorted);
+    setCoinsHistory(coinsHistory.reverse());
   };
 
-  const handleDelete = (coin) => {
+  const handleDelete = (coin, index) => {
     setCoins(coins.filter((coinsObj) => coinsObj.id !== coin.id));
+    coinsHistory.splice(index, 1);
   };
 
   return (
@@ -101,7 +97,7 @@ const TableComponent = () => {
                     #
                   </TableSortLabel>
                 </TableCell>
-                <TableCell className={classes.tableCell}>Name</TableCell>
+                <TableCell className={classes.nameCell}>Name</TableCell>
                 <TableCell className={classes.tableCell}>24H CHANGE</TableCell>
                 <TableCell className={classes.tableCell}>PRICE</TableCell>
                 <TableCell className={classes.tableCell}>
@@ -132,7 +128,7 @@ const TableComponent = () => {
                     <TableCell
                       align="center"
                       id={"coinName"}
-                      className={classes.tableCell}
+                      className={classes.nameCell}
                     >
                       <div
                         style={{
@@ -149,8 +145,9 @@ const TableComponent = () => {
                           src={coin.icon}
                           alt="icon"
                         />
-                        <span>
-                          {coin.name + " "}
+                        <span>{coin.name + " "} &#8226; </span>
+                        <span style={{color: "rgb(83, 83, 83,0.6)"}}>
+                          &nbsp;
                           {coin.symbol}
                         </span>
                       </div>
@@ -160,8 +157,8 @@ const TableComponent = () => {
                       style={{
                         color:
                           coin.priceChange1d > 0
-                            ? "rgb(1, 110, 74)"
-                            : "rgb(161, 0, 0)",
+                            ? "rgb(43, 139, 85)"
+                            : "rgb(194, 39, 39)",
                       }}
                     >
                       <div

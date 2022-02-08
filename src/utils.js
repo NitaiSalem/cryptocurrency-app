@@ -16,7 +16,6 @@ export const fetchPriceHistory = async (coinId, period) => {
     const res = await axios.get(
       `https://api.coinstats.app/public/v1/charts?period=${period}&coinId=${coinId}`
     );
-    console.log({res});
     return res.data;
   } catch (err) {
     console.log(err);

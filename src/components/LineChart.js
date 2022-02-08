@@ -37,8 +37,8 @@ const LineChart = ({index, coinsHistory}) => {
         pointRadius: 0.1,
         borderColor:
           priceValue[0] > priceValue[priceValue.length - 1]
-            ? "rgb(161, 0, 0)"
-            : "rgb(1, 110, 74)",
+            ? "rgb(194, 39, 39)"
+            : "rgb(43, 139, 85)",
       },
     ],
   };

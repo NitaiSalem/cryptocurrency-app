@@ -38,7 +38,7 @@ const CoinsToCompare = ({setCurrentCoin}) => {
             <p>
               {currentCoin.coin.name}
               <span>
-                <span style={{fontSize: "20px"}}> &#183; </span>
+                <span style={{fontSize: "20px"}}>&#8226; </span>
                 {currentCoin.coin.symbol}
               </span>
             </p>

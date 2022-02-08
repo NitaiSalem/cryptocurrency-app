@@ -34,7 +34,7 @@ const OptionsMenu = ({coin, coinsHistory, index, handleDelete}) => {
         aria-expanded={isOpen ? "true" : undefined}
         onClick={openMenu}
       >
-        <MoreVertIcon />
+        <MoreVertIcon style={{color: "rgb(110 110 118)"}} />
       </Button>
       <Menu
         id="basic-menu"
@@ -48,7 +48,9 @@ const OptionsMenu = ({coin, coinsHistory, index, handleDelete}) => {
         <MenuItem onClick={() => handleAddToCompare(coin)}>
           Add to compare
         </MenuItem>
-        <MenuItem onClick={() => handleDelete(coin)}>Delete row</MenuItem>
+        <MenuItem onClick={() => handleDelete(coin, index)}>
+          Delete row
+        </MenuItem>
       </Menu>
     </div>
   );
