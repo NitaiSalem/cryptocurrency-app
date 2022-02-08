@@ -7,6 +7,24 @@
     margin-top: 50px;
   }
 
+  .MuiTablePagination-actions {
+    margin-left: 0 !important;
+  }
+  .MuiTablePagination-selectLabel {
+    font-size: 13px !important;
+  }
+  .MuiTablePagination-displayedRows {
+    font-size: 13px !important;
+  }
+
+  .MuiTablePagination-select {
+    padding-left: 3px !important;
+  }
+
+  .MuiTablePagination-toolbar {
+    overflow-x: hidden;
+  }
+
   //   .css-11bfvty-MuiToolbar-root-MuiTablePagination-toolbar
   //     .MuiTablePagination-actions {
   //     margin-left: 0 !important;
