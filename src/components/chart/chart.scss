@@ -1,9 +1,26 @@
 .active {
   color: rgb(226, 136, 17) !important;
+  font-size: 15px !important;
+}
+
+.normal {
+  font-size: 15px !important;
 }
 
 .time-buttons-container {
   display: flex;
   flex-direction: row;
+  justify-content: center !important;
   align-items: center;
+}
+
+.chart-container {
+  padding: 0px 10px 10px 10px;
+}
+
+@media (max-width: 600px) {
+  .chart-container {
+    width: 100vw !important;
+    margin-top: 50px;
+  }
 }

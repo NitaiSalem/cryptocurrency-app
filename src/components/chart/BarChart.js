@@ -6,83 +6,53 @@ import {
 } from "@mui/material";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
-import {useContext, useEffect, useMemo, useState} from "react";
-import {Line} from "react-chartjs-2";
-import {CoinsContext} from "../../App";
-import {getCoinValue} from "../../utils";
-import TimePeriodButtons from "./TimePeriodButtons";
+import {useState} from "react";
+import {Bar} from "react-chartjs-2";
+import {distributeArray, formatDateLabel} from "../../utils";
 import "chartjs-adapter-date-fns";
-import CoinsToCompare from "./CoinsToCompare";
+import {memo} from "react";
+
 import {
   Chart as ChartJS,
   TimeScale,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
   Legend,
+  BarElement,
 } from "chart.js";
-import BarChart from "./BarChart";
 
 ChartJS.register(
   CategoryScale,
   TimeScale,
   LinearScale,
   PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 );
 
-const Chart = () => {
-  const {toCompare} = useContext(CoinsContext);
-  const [labelFonts, setlabelFonts] = useState(12);
-  const [lineBorderWidth, setLineBorderWidth] = useState(1.5);
+const BarChart = ({currentCoin, labelFonts, lineBorderWidth}) => {
   const [shownLines, setShownLines] = useState({
     usd: false,
     btc: false,
     eth: false,
   });
-  const [currentCoin, setCurrentCoin] = useState(
-    toCompare ? toCompare[toCompare.length - 1] : []
-  );
 
   const historyArr = currentCoin ? currentCoin.coinHistory.chart : [];
-
-  const usdValue = useMemo(
-    () => (currentCoin ? getCoinValue(historyArr, 1) : []),
-    [currentCoin]
-  );
-
-  const bitCoinValue = useMemo(
-    () => (currentCoin ? getCoinValue(historyArr, 2) : []),
-    [currentCoin]
-  );
-
-  const ethereumValue = useMemo(
-    () => (currentCoin ? getCoinValue(historyArr, 3) : []),
-    [currentCoin]
-  );
-  const resizeWindow = () => {
-    if (window.innerWidth < 550) {
-      setlabelFonts(7);
-      setLineBorderWidth(0.5);
-    }
-  };
-
-  useEffect(() => {
-    resizeWindow();
-    window.addEventListener("resize", resizeWindow);
-    return () => window.removeEventListener("resize", resizeWindow);
-  }, []);
+  const barArr = currentCoin ? distributeArray(historyArr) : [];
+  const datesArr = currentCoin ? formatDateLabel(barArr, currentCoin) : [];
+  const usdValue = currentCoin ? barArr.map((arr) => arr[1]) : [];
+  const bitCoinValue = currentCoin ? barArr.map((arr) => arr[2]) : [];
+  const ethereumValue = currentCoin ? barArr.map((arr) => arr[3]) : [];
 
   const data = {
+    labels: datesArr,
     datasets: [
       {
-        pointRadius: 0,
         hidden: shownLines.usd,
         yAxisID: "y1",
         data: usdValue,
@@ -91,7 +61,6 @@ const Chart = () => {
         borderWidth: lineBorderWidth,
       },
       {
-        pointRadius: 0,
         hidden: shownLines.btc,
         yAxisID: "y2",
         data: bitCoinValue,
@@ -100,7 +69,6 @@ const Chart = () => {
         borderWidth: lineBorderWidth,
       },
       {
-        pointRadius: 0,
         hidden: shownLines.eth,
         yAxisID: "y3",
         data: ethereumValue,
@@ -122,30 +90,15 @@ const Chart = () => {
     },
     scales: {
       x: {
-        type: "time",
-        time: {
-          round: true,
-          displayFormats: {
-            quarter: "MMM YYYY",
-            day: "MMM  yy",
-            hour: "HH:mm",
-          },
-        },
         ticks: {
-          maxTicksLimit: 6,
           font: {
             size: labelFonts,
           },
-        },
-        grid: {
-          display: false,
-          drawBorder: false,
         },
       },
 
       y1: {
         position: "left",
-        type: "linear",
         grid: {
           display: false,
           drawBorder: false,
@@ -157,7 +110,7 @@ const Chart = () => {
           color: "#e28811",
           count: 5,
 
-          callback: function (value) {
+          callback: function (value, index, ticks) {
             return new Intl.NumberFormat("en-IN", {
               style: "currency",
               currency: "USD",
@@ -168,7 +121,6 @@ const Chart = () => {
       },
 
       y2: {
-        type: "linear",
         position: "right",
 
         ticks: {
@@ -177,7 +129,7 @@ const Chart = () => {
           },
           color: "#0E7C4A",
           count: 5,
-          callback: function (value) {
+          callback: function (value, index, ticks) {
             value = value < 1 ? value.toFixed(7) * 1 : value.toFixed(2) * 1;
             return "₿" + value;
           },
@@ -189,7 +141,6 @@ const Chart = () => {
       },
 
       y3: {
-        type: "linear",
         position: "right",
 
         ticks: {
@@ -221,11 +172,7 @@ const Chart = () => {
       className="chart-container"
       style={{position: "relative", width: "70vw"}}
     >
-      <CoinsToCompare
-        setCurrentCoin={setCurrentCoin}
-        currentCoin={currentCoin}
-      />
-      <Line options={options} data={data} height={120} />
+      <Bar options={options} data={data} height={120} />
       <FormControl component="fieldset" className="checkbox-container">
         <FormGroup aria-label="position" row>
           <FormControlLabel
@@ -302,17 +249,8 @@ const Chart = () => {
           />
         </FormGroup>
       </FormControl>
-      <TimePeriodButtons
-        setCurrentCoin={setCurrentCoin}
-        currentCoin={currentCoin}
-      />
-      <BarChart
-        currentCoin={currentCoin}
-        labelFonts={labelFonts}
-        lineBorderWidth={lineBorderWidth}
-      />
     </div>
   );
 };
 
-export default Chart;
+export default memo(BarChart);

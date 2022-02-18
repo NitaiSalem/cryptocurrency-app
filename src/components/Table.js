@@ -10,16 +10,15 @@ import {
   Grid,
 } from "@mui/material";
 import {makeStyles} from "@mui/styles";
-import MoreIcon from "@mui/icons-material/More";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {CoinsContext} from "../App";
 import {getNumber} from "../utils";
 import LineChart from "./LineChart";
 import "./table.scss";
 import OptionsMenu from "./OptionsMenu";
-
+import ColumnsMenu from "./ColumnsMenu";
 const useStyles = makeStyles({
   root: {},
   table: {},
@@ -41,9 +40,17 @@ const TableComponent = () => {
   const [orderDirection, setOrderDirection] = useState("desc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [shownColumns, setShownColumns] = useState({
+    "Rank ": true,
+    "1h Change": false,
+    "24h Change": true,
+    "7d Change": false,
+    "Price ": true,
+    "price in BTC": true,
+    "Market Cap": true,
+    "24 Volume": true,
+  });
 
-  console.log(" coins in table ", coins);
-  console.log("coinshistory intable", coinsHistory);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -89,27 +96,57 @@ const TableComponent = () => {
           >
             <TableHead>
               <TableRow className={classes.tableRow}>
-                <TableCell
-                  className={classes.tableCell}
-                  onClick={handleSortRequest}
-                >
-                  <TableSortLabel active={true} direction={orderDirection}>
-                    #
-                  </TableSortLabel>
-                </TableCell>
+                {shownColumns["Rank "] && (
+                  <TableCell
+                    className={classes.tableCell}
+                    onClick={handleSortRequest}
+                  >
+                    <TableSortLabel active={true} direction={orderDirection}>
+                      #
+                    </TableSortLabel>
+                  </TableCell>
+                )}
+
                 <TableCell className={classes.nameCell}>Name</TableCell>
-                <TableCell className={classes.tableCell}>24H CHANGE</TableCell>
-                <TableCell className={classes.tableCell}>PRICE</TableCell>
-                <TableCell className={classes.tableCell}>
-                  PRICE IN BTC
-                </TableCell>
-                <TableCell className={classes.tableCell}>MARKET CAP</TableCell>
-                <TableCell className={classes.tableCell}>VOLUME 24H</TableCell>
+                {shownColumns["1h Change"] && (
+                  <TableCell className={classes.tableCell}>1H CHANGE</TableCell>
+                )}
+                {shownColumns["24h Change"] && (
+                  <TableCell className={classes.tableCell}>
+                    24H CHANGE
+                  </TableCell>
+                )}
+
+                {shownColumns["7d Change"] && (
+                  <TableCell className={classes.tableCell}>7D CHANGE</TableCell>
+                )}
+                {shownColumns["Price "] && (
+                  <TableCell className={classes.tableCell}>PRICE</TableCell>
+                )}
+                {shownColumns["Price in BTC"] && (
+                  <TableCell className={classes.tableCell}>
+                    PRICE IN BTC
+                  </TableCell>
+                )}
+                {shownColumns["Market Cap"] && (
+                  <TableCell className={classes.tableCell}>
+                    MARKET CAP
+                  </TableCell>
+                )}
+                {shownColumns["24 Volume"] && (
+                  <TableCell className={classes.tableCell}>
+                    VOLUME 24H
+                  </TableCell>
+                )}
+
                 <TableCell className={classes.tableCell}>
                   PRICE GRAPH(7D)
                 </TableCell>
                 <TableCell align="center" className={classes.tableCell}>
-                  <MoreIcon />
+                  <ColumnsMenu
+                    shownColumns={shownColumns}
+                    setShownColumns={setShownColumns}
+                  />
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -118,13 +155,16 @@ const TableComponent = () => {
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((coin, i) => (
                   <TableRow className={classes.tableRow} key={coin.id}>
-                    <TableCell
-                      className={classes.tableCell}
-                      component="th"
-                      scope="row"
-                    >
-                      {coin.rank}
-                    </TableCell>
+                    {shownColumns["Rank "] && (
+                      <TableCell
+                        className={classes.tableCell}
+                        component="th"
+                        scope="row"
+                      >
+                        {coin.rank}
+                      </TableCell>
+                    )}
+
                     <TableCell
                       align="center"
                       id={"coinName"}
@@ -145,52 +185,117 @@ const TableComponent = () => {
                           src={coin.icon}
                           alt="icon"
                         />
-                        <span>{coin.name + " "} &#8226; </span>
+                        <span>{coin.name} </span>
                         <span style={{color: "rgb(83, 83, 83,0.6)"}}>
-                          &nbsp;
+                          &nbsp; &#8226; &nbsp;
                           {coin.symbol}
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      style={{
-                        color:
-                          coin.priceChange1d > 0
-                            ? "rgb(43, 139, 85)"
-                            : "rgb(194, 39, 39)",
-                      }}
-                    >
-                      <div
+                    {shownColumns["1h Change"] && (
+                      <TableCell
+                        className={classes.tableCell}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexWrap: "noWrap",
+                          color:
+                            coin.priceChange1h > 0
+                              ? "rgb(43, 139, 85)"
+                              : "rgb(194, 39, 39)",
                         }}
                       >
-                        {coin.priceChange1d > 0 ? (
-                          <ArrowDropUpIcon />
-                        ) : (
-                          <ArrowDropDownIcon />
-                        )}
-                        {coin.priceChange1d + "%"}
-                      </div>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      $
-                      {coin.price >= 1
-                        ? coin.price.toFixed(2)
-                        : coin.price.toFixed(6)}
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      {coin.priceBtc.toFixed(8)}
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      {getNumber(coin.marketCap)}
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      {getNumber(coin.volume)}
-                    </TableCell>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexWrap: "noWrap",
+                          }}
+                        >
+                          {coin.priceChange1h > 0 ? (
+                            <ArrowDropUpIcon />
+                          ) : (
+                            <ArrowDropDownIcon />
+                          )}
+                          {coin.priceChange1h + "%"}
+                        </div>
+                      </TableCell>
+                    )}
+
+                    {shownColumns["24h Change"] && (
+                      <TableCell
+                        className={classes.tableCell}
+                        style={{
+                          color:
+                            coin.priceChange1d > 0
+                              ? "rgb(43, 139, 85)"
+                              : "rgb(194, 39, 39)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexWrap: "noWrap",
+                          }}
+                        >
+                          {coin.priceChange1d > 0 ? (
+                            <ArrowDropUpIcon />
+                          ) : (
+                            <ArrowDropDownIcon />
+                          )}
+                          {coin.priceChange1d + "%"}
+                        </div>
+                      </TableCell>
+                    )}
+
+                    {shownColumns["7d Change"] && (
+                      <TableCell
+                        className={classes.tableCell}
+                        style={{
+                          color:
+                            coin.priceChange1w > 0
+                              ? "rgb(43, 139, 85)"
+                              : "rgb(194, 39, 39)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexWrap: "noWrap",
+                          }}
+                        >
+                          {coin.priceChange1w > 0 ? (
+                            <ArrowDropUpIcon />
+                          ) : (
+                            <ArrowDropDownIcon />
+                          )}
+                          {coin.priceChange1w + "%"}
+                        </div>
+                      </TableCell>
+                    )}
+                    {shownColumns["Price "] && (
+                      <TableCell className={classes.tableCell}>
+                        $
+                        {coin.price >= 1
+                          ? coin.price.toFixed(2)
+                          : coin.price.toFixed(6)}
+                      </TableCell>
+                    )}
+                    {shownColumns["Price in BTC"] && (
+                      <TableCell className={classes.tableCell}>
+                        {coin.priceBtc.toFixed(8)}
+                      </TableCell>
+                    )}
+                    {shownColumns["Market Cap"] && (
+                      <TableCell className={classes.tableCell}>
+                        {getNumber(coin.marketCap)}
+                      </TableCell>
+                    )}
+                    {shownColumns["24 Volume"] && (
+                      <TableCell className={classes.tableCell}>
+                        {getNumber(coin.volume)}
+                      </TableCell>
+                    )}
+
                     <TableCell
                       className={classes.tableCell}
                       align="right"
@@ -199,6 +304,7 @@ const TableComponent = () => {
                       {
                         <LineChart
                           index={i}
+                          coin={coin}
                           coinsHistory={coinsHistory[i] ? coinsHistory : []}
                         />
                       }
@@ -215,17 +321,17 @@ const TableComponent = () => {
                 ))}
             </TableBody>
           </Table>
-          <TablePagination
-            className="table-pagination"
-            rowsPerPageOptions={[20, 100, 300]}
-            component="div"
-            count={coins && coins.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
         </TableContainer>
+        <TablePagination
+          className="table-pagination"
+          rowsPerPageOptions={[20, 100, 300]}
+          component="div"
+          count={coins && coins.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Grid>
     </div>
   );

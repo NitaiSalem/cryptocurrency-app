@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-const LineChart = ({index, coinsHistory}) => {
+const LineChart = ({index, coin, coinsHistory}) => {
   const coinHistoryArr = coinsHistory[index] ? coinsHistory[index].chart : [];
   const priceValue = coinHistoryArr.map((arr) => arr[1]);
   let labelsArr = [];
@@ -33,12 +33,11 @@ const LineChart = ({index, coinsHistory}) => {
     datasets: [
       {
         label: ``,
+        borderWidth: 0.9,
         data: priceValue,
-        pointRadius: 0.1,
+        pointRadius: 0,
         borderColor:
-          priceValue[0] > priceValue[priceValue.length - 1]
-            ? "rgb(194, 39, 39)"
-            : "rgb(43, 139, 85)",
+          coin.priceChange1w >= 0 ? "rgb(43, 139, 85)" : "rgb(194, 39, 39)",
       },
     ],
   };
@@ -69,7 +68,6 @@ const LineChart = ({index, coinsHistory}) => {
       },
     },
   };
-
   return (
     <div className="chart-wrapper">
       <Line data={data} width={10} height={50} options={options} />

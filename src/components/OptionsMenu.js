@@ -4,20 +4,19 @@ import {CoinsContext} from "../App";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {fetchPriceHistory} from "../utils";
 
-const OptionsMenu = ({coin, coinsHistory, index, handleDelete}) => {
+const OptionsMenu = ({coin, index, handleDelete}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const {setToCompare, toCompare} = useContext(CoinsContext);
 
   const handleAddToCompare = async (coin) => {
-    console.log(" the coin value on click ", coin);
     setAnchorEl(null);
 
     if (!toCompare.find(({coinId}) => coinId === coin.id)) {
       const coinId = coin.id;
-      const coinHistory = await fetchPriceHistory(coinId, "24h");
-      console.log({coinHistory});
-      setToCompare([...toCompare, {coinId, coin, coinHistory}]);
+      const coinTimePeriod = "24h";
+      const coinHistory = await fetchPriceHistory(coinId, coinTimePeriod);
+      setToCompare([...toCompare, {coinId, coin, coinHistory, coinTimePeriod}]);
     }
   };
 
